@@ -1,0 +1,1589 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Balancedbyaliyah - Wellness &amp; Self-Care</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sage: { 50: '#f6f7f5', 100: '#e8ebe5', 200: '#d4dace', 300: '#b5c0ab', 400: '#96a688', 500: '#7a8d6b', 600: '#5f7153', 700: '#4b5a43', 800: '#3e4938', 900: '#353f31' },
+            cream: { 50: '#fdfcfa', 100: '#faf7f2', 200: '#f5efe5', 300: '#ede4d3', 400: '#e2d4bc', 500: '#d4c1a1' },
+            lavender: { 50: '#f9f8fb', 100: '#f3f1f7', 200: '#e9e5f0', 300: '#d9d2e5', 400: '#c4b8d6', 500: '#ab99c2' },
+            warm: { 50: '#fefdfb', 100: '#fdf9f3', 200: '#faf2e6', 300: '#f5e8d4', 400: '#eedad0', 500: '#e4c8b8' }
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html, body { height: 100%; }
+    .texture-bg {
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      background-blend-mode: soft-light;
+      opacity: 0.03;
+    }
+    .glass-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    .icon-glass {
+      background: linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(248,247,245,0.85) 100%);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+    .fade-in { animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .breath-circle { animation: breathe 8s ease-in-out infinite; }
+    @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+    input:focus, select:focus, textarea:focus, button:focus { outline: 2px solid #96a688; outline-offset: 2px; }
+    .toast { animation: slideIn 0.3s ease-out, fadeOut 0.3s ease-in 2.7s forwards; }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    @keyframes fadeOut { to { opacity: 0; } }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full font-sans text-gray-800 bg-cream-50 overflow-auto">
+  <div id="app-wrapper" class="min-h-full w-full relative"><!-- Texture Overlay -->
+   <div class="texture-bg fixed inset-0 pointer-events-none"></div><!-- Toast Container -->
+   <div id="toast-container" class="fixed top-20 right-4 z-50 flex flex-col gap-2"></div><!-- Navigation -->
+   <nav id="main-nav" class="sticky top-0 z-40 bg-cream-50/95 backdrop-blur-md border-b border-cream-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="flex justify-between items-center h-16"><a href="#landing" class="font-serif text-xl sm:text-2xl font-semibold text-sage-700 hover:text-sage-600 transition-colors" id="brand-wordmark">Balancedbyaliyah</a>
+      <div id="nav-links" class="flex items-center gap-2 sm:gap-4"></div>
+     </div>
+    </div>
+   </nav><!-- Main Content -->
+   <main id="main-content" class="relative z-10"></main><!-- Footer -->
+   <footer class="bg-sage-800 text-cream-100 py-8 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex gap-6 text-sm"><a href="#" class="hover:text-white transition-colors">Privacy</a> <a href="#" class="hover:text-white transition-colors">Terms</a> <a href="#" class="hover:text-white transition-colors">Contact</a>
+      </div>
+      <p class="text-sm text-cream-300"><span id="footer-text">© Balancedbyaliyah. All rights reserved.</span></p>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    // ============ CONFIG & STATE ============
+    const defaultConfig = {
+      brand_name: 'Balancedbyaliyah',
+      hero_headline: 'Your calm space for daily self-care—guided meditations, breathwork, mood check-ins, and gentle tools to help you feel balanced.',
+      cta_text: 'Begin Your Wellness Journey',
+      footer_text: '© Balancedbyaliyah. All rights reserved.',
+      primary_color: '#7a8d6b',
+      secondary_color: '#f5efe5',
+      text_color: '#3e4938',
+      accent_color: '#ab99c2',
+      surface_color: '#fdfcfa'
+    };
+
+    let appData = [];
+    let currentUser = null;
+    let breathingInterval = null;
+
+    const affirmations = [
+      "Today, I choose peace over perfection.",
+      "I am worthy of rest and restoration.",
+      "My breath anchors me to this present moment.",
+      "I release what no longer serves me.",
+      "I am becoming more balanced each day.",
+      "My well-being is a priority, not an afterthought.",
+      "I trust the timing of my healing journey.",
+      "Every small step forward matters."
+    ];
+
+    const meditations = [
+      { id: 'm1', title: 'Morning Calm', duration: 5, description: 'Start your day with clarity' },
+      { id: 'm2', title: 'Stress Relief', duration: 10, description: 'Release tension and find peace' },
+      { id: 'm3', title: 'Body Scan', duration: 15, description: 'Connect with your physical self' },
+      { id: 'm4', title: 'Deep Rest', duration: 20, description: 'Profound relaxation practice' },
+      { id: 'm5', title: 'Evening Wind Down', duration: 25, description: 'Prepare for restful sleep' }
+    ];
+
+    const breathPatterns = [
+      { id: 'box', name: 'Box Breathing', inhale: 4, hold1: 4, exhale: 4, hold2: 4, desc: 'Equal counts for balance' },
+      { id: '478', name: '4-7-8 Calming', inhale: 4, hold1: 7, exhale: 8, hold2: 0, desc: 'Activates relaxation response' },
+      { id: 'calming', name: 'Calming Breath', inhale: 4, hold1: 2, exhale: 6, hold2: 2, desc: 'Extended exhale for calm' }
+    ];
+
+    const dbtSkills = [
+      { id: 'tipp', name: 'TIPP', full: 'Temperature, Intense Exercise, Paced Breathing, Paired Muscle Relaxation', desc: 'Crisis survival skills for intense emotions' },
+      { id: 'dearman', name: 'DEAR MAN', full: 'Describe, Express, Assert, Reinforce, Mindful, Appear confident, Negotiate', desc: 'Interpersonal effectiveness skills' },
+      { id: 'give', name: 'GIVE', full: 'Gentle, Interested, Validate, Easy manner', desc: 'Relationship maintenance skills' },
+      { id: 'mindfulness', name: 'Mindfulness', full: 'Observe, Describe, Participate, Non-judgmentally, One-mindfully, Effectively', desc: 'Core mindfulness practices' }
+    ];
+
+    const events = [
+      { id: 'e1', title: 'Sound Bath Meditation', date: '2025-02-15', time: '6:00 PM', location: 'Harmony Studio, Atlanta', price: 35, aliyahPick: true, desc: 'Crystal singing bowls and gong immersion' },
+      { id: 'e2', title: 'Sunrise Yoga in the Park', date: '2025-02-18', time: '6:30 AM', location: 'Piedmont Park, Atlanta', price: 0, aliyahPick: true, desc: 'Free community yoga session' },
+      { id: 'e3', title: 'Breathwork Workshop', date: '2025-02-22', time: '2:00 PM', location: 'Wellness Center, Decatur', price: 45, aliyahPick: false, desc: 'Learn advanced breathing techniques' },
+      { id: 'e4', title: 'Meditation & Tea Ceremony', date: '2025-02-28', time: '4:00 PM', location: 'Tea House, Midtown', price: 55, aliyahPick: true, desc: 'Mindful tea drinking practice' }
+    ];
+
+    const retreats = [
+      { id: 'r1', title: 'Weekend Wellness Escape', dates: 'Mar 14-16, 2025', location: 'Blue Ridge Mountains, GA', price: 599, spots: 8, desc: 'Two nights of meditation, yoga, and nature immersion', includes: ['All meals', 'Private cabin', '4 yoga sessions', 'Sound healing', 'Nature walks'] },
+      { id: 'r2', title: 'Spring Renewal Retreat', dates: 'Apr 4-6, 2025', location: 'Savannah Coast, GA', price: 749, spots: 12, desc: 'Beachside healing and restoration', includes: ['Oceanfront rooms', 'Spa treatments', 'Meditation sessions', 'Farm-to-table meals', 'Journaling workshop'] },
+      { id: 'r3', title: 'Deep Rest Intensive', dates: 'May 1-4, 2025', location: 'Asheville, NC', price: 899, spots: 6, desc: 'Four days of profound rest and nervous system healing', includes: ['3 nights lodging', 'Yoga nidra daily', 'Massage therapy', 'Silent morning hours', 'Aftercare support'] }
+    ];
+
+    const challenges = [
+      { id: 'c1', title: '7-Day Meditation Starter', duration: 7, desc: 'Build a daily meditation habit', tasks: ['Day 1: 5 min breathing', 'Day 2: Body scan', 'Day 3: Loving-kindness', 'Day 4: Walking meditation', 'Day 5: Gratitude practice', 'Day 6: Stress relief', 'Day 7: Your choice'] },
+      { id: 'c2', title: '21-Day Mood Tracker', duration: 21, desc: 'Daily check-ins for self-awareness', tasks: Array.from({length: 21}, (_, i) => `Day ${i+1}: Log your mood`) },
+      { id: 'c3', title: '14-Day Breathwork Journey', duration: 14, desc: 'Explore different breathing techniques', tasks: Array.from({length: 14}, (_, i) => `Day ${i+1}: ${i % 3 === 0 ? 'Box breathing' : i % 3 === 1 ? '4-7-8 calming' : 'Extended exhale'}`) }
+    ];
+
+    // ============ DATA SDK SETUP ============
+    const dataHandler = {
+      onDataChanged(data) {
+        appData = data;
+        if (window.location.hash === '#dashboard') renderDashboard();
+        if (window.location.hash === '#practices') updatePracticesData();
+        if (window.location.hash === '#community') renderCommunity();
+      }
+    };
+
+    // ============ ELEMENT SDK SETUP ============
+    const elementConfig = {
+      brand_name: defaultConfig.brand_name,
+      hero_headline: defaultConfig.hero_headline,
+      cta_text: defaultConfig.cta_text,
+      primary_color: defaultConfig.primary_color,
+      secondary_color: defaultConfig.secondary_color,
+      text_color: defaultConfig.text_color,
+      accent_color: defaultConfig.accent_color,
+      surface_color: defaultConfig.surface_color
+    };
+
+    async function onConfigChange(config) {
+      const brandEls = document.querySelectorAll('#brand-wordmark, #footer-brand, .brand-name');
+      brandEls.forEach(el => { if (el) el.textContent = config.brand_name || defaultConfig.brand_name; });
+      
+      const heroHeadline = document.getElementById('hero-headline');
+      if (heroHeadline) heroHeadline.textContent = config.hero_headline || defaultConfig.hero_headline;
+      
+      const ctaBtn = document.getElementById('hero-cta');
+      if (ctaBtn) ctaBtn.textContent = config.cta_text || defaultConfig.cta_text;
+
+      const footerText = document.getElementById('footer-text');
+      if (footerText) footerText.textContent = config.footer_text || defaultConfig.footer_text;
+
+      document.documentElement.style.setProperty('--primary', config.primary_color || defaultConfig.primary_color);
+      document.documentElement.style.setProperty('--secondary', config.secondary_color || defaultConfig.secondary_color);
+      document.documentElement.style.setProperty('--text', config.text_color || defaultConfig.text_color);
+      document.documentElement.style.setProperty('--accent', config.accent_color || defaultConfig.accent_color);
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          { get: () => config.primary_color || defaultConfig.primary_color, set: (v) => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); }},
+          { get: () => config.secondary_color || defaultConfig.secondary_color, set: (v) => { config.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); }},
+          { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); }},
+          { get: () => config.accent_color || defaultConfig.accent_color, set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); }},
+          { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); }}
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['brand_name', config.brand_name || defaultConfig.brand_name],
+        ['hero_headline', config.hero_headline || defaultConfig.hero_headline],
+        ['cta_text', config.cta_text || defaultConfig.cta_text],
+        ['footer_text', config.footer_text || defaultConfig.footer_text]
+      ]);
+    }
+
+    // ============ UTILITIES ============
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast px-4 py-3 rounded-lg shadow-lg ${type === 'error' ? 'bg-red-500' : type === 'warning' ? 'bg-amber-500' : 'bg-sage-600'} text-white text-sm font-medium`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    function getUser() {
+      const stored = localStorage.getItem('bba_user');
+      return stored ? JSON.parse(stored) : null;
+    }
+
+    function setUser(user) {
+      currentUser = user;
+      localStorage.setItem('bba_user', JSON.stringify(user));
+      updateNav();
+    }
+
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem('bba_user');
+      updateNav();
+      navigate('landing');
+      showToast('Signed out successfully');
+    }
+
+    function getUserData(type) {
+      if (!currentUser) return [];
+      return appData.filter(d => d.userId === currentUser.email && d.type === type);
+    }
+
+    function getStreak() {
+      const checkIns = getUserData('checkin').sort((a, b) => new Date(b.date) - new Date(a.date));
+      if (checkIns.length === 0) return 0;
+      let streak = 0;
+      let currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+      
+      for (const checkIn of checkIns) {
+        const checkInDate = new Date(checkIn.date);
+        checkInDate.setHours(0, 0, 0, 0);
+        const diffDays = Math.floor((currentDate - checkInDate) / (1000 * 60 * 60 * 24));
+        if (diffDays <= 1) {
+          streak++;
+          currentDate = checkInDate;
+        } else {
+          break;
+        }
+      }
+      return streak;
+    }
+
+    // ============ NAVIGATION ============
+    function navigate(page, params = {}) {
+      let hash = '#' + page;
+      if (Object.keys(params).length > 0) {
+        hash += '?' + new URLSearchParams(params).toString();
+      }
+      window.location.hash = hash;
+    }
+
+    function getHashParams() {
+      const hash = window.location.hash.slice(1);
+      const [page, queryString] = hash.split('?');
+      const params = queryString ? Object.fromEntries(new URLSearchParams(queryString)) : {};
+      return { page: page || 'landing', params };
+    }
+
+    function updateNav() {
+      const navLinks = document.getElementById('nav-links');
+      currentUser = getUser();
+      
+      if (currentUser) {
+        navLinks.innerHTML = `
+          <a href="#dashboard" class="hidden sm:block text-sm font-medium text-sage-700 hover:text-sage-500 transition-colors">Dashboard</a>
+          <a href="#practices" class="hidden sm:block text-sm font-medium text-sage-700 hover:text-sage-500 transition-colors">Practices</a>
+          <a href="#events" class="hidden sm:block text-sm font-medium text-sage-700 hover:text-sage-500 transition-colors">Events</a>
+          <a href="#retreats" class="hidden sm:block text-sm font-medium text-sage-700 hover:text-sage-500 transition-colors">Retreats</a>
+          <a href="#community" class="hidden sm:block text-sm font-medium text-sage-700 hover:text-sage-500 transition-colors">Community</a>
+          <a href="#profile" class="hidden sm:block text-sm font-medium text-sage-700 hover:text-sage-500 transition-colors">Profile</a>
+          <button onclick="logout()" class="text-sm font-medium text-sage-600 hover:text-sage-800 transition-colors">Sign Out</button>
+          <button onclick="toggleMobileMenu()" class="sm:hidden p-2 text-sage-700">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        `;
+      } else {
+        navLinks.innerHTML = `
+          <a href="#login" class="px-4 py-2 text-sm font-medium text-sage-700 hover:text-sage-500 transition-colors rounded-full border border-sage-300 hover:border-sage-400">Log In</a>
+          <a href="#signup" class="text-sm font-medium text-sage-600 hover:text-sage-800 transition-colors">Sign Up</a>
+        `;
+      }
+    }
+
+    function toggleMobileMenu() {
+      let menu = document.getElementById('mobile-menu');
+      if (menu) {
+        menu.remove();
+      } else {
+        const nav = document.getElementById('main-nav');
+        menu = document.createElement('div');
+        menu.id = 'mobile-menu';
+        menu.className = 'sm:hidden bg-cream-50 border-b border-cream-200 py-4 px-4 flex flex-col gap-3';
+        menu.innerHTML = `
+          <a href="#dashboard" class="text-sm font-medium text-sage-700 hover:text-sage-500 py-2">Dashboard</a>
+          <a href="#practices" class="text-sm font-medium text-sage-700 hover:text-sage-500 py-2">Practices</a>
+          <a href="#events" class="text-sm font-medium text-sage-700 hover:text-sage-500 py-2">Events</a>
+          <a href="#retreats" class="text-sm font-medium text-sage-700 hover:text-sage-500 py-2">Retreats</a>
+          <a href="#community" class="text-sm font-medium text-sage-700 hover:text-sage-500 py-2">Community</a>
+          <a href="#profile" class="text-sm font-medium text-sage-700 hover:text-sage-500 py-2">Profile</a>
+        `;
+        nav.appendChild(menu);
+      }
+    }
+
+    // ============ ICONS (SVG) ============
+    const icons = {
+      meditation: `<svg viewBox="0 0 64 64" class="w-12 h-12"><defs><linearGradient id="medGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#d9d2e5"/><stop offset="100%" style="stop-color:#c4b8d6"/></linearGradient></defs><circle cx="32" cy="32" r="28" fill="url(#medGrad)" opacity="0.3"/><circle cx="32" cy="24" r="8" fill="#7a8d6b"/><path d="M20 52c0-8 5-14 12-14s12 6 12 14" fill="none" stroke="#7a8d6b" stroke-width="3" stroke-linecap="round"/><path d="M32 38v8M26 44h12" stroke="#7a8d6b" stroke-width="2" stroke-linecap="round"/></svg>`,
+      breathwork: `<svg viewBox="0 0 64 64" class="w-12 h-12"><defs><linearGradient id="breathGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#b5c0ab"/><stop offset="100%" style="stop-color:#96a688"/></linearGradient></defs><circle cx="32" cy="32" r="24" fill="url(#breathGrad)" opacity="0.2"/><circle cx="32" cy="32" r="16" fill="none" stroke="#7a8d6b" stroke-width="2" stroke-dasharray="4 2"/><circle cx="32" cy="32" r="8" fill="#7a8d6b" opacity="0.6"/><path d="M32 8v8M32 48v8M8 32h8M48 32h8" stroke="#96a688" stroke-width="2" stroke-linecap="round"/></svg>`,
+      checkin: `<svg viewBox="0 0 64 64" class="w-12 h-12"><defs><linearGradient id="checkGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#f5e8d4"/><stop offset="100%" style="stop-color:#e4c8b8"/></linearGradient></defs><rect x="12" y="8" width="40" height="48" rx="4" fill="url(#checkGrad)"/><rect x="18" y="16" width="28" height="4" rx="2" fill="#7a8d6b" opacity="0.6"/><rect x="18" y="26" width="20" height="3" rx="1.5" fill="#96a688" opacity="0.4"/><rect x="18" y="34" width="24" height="3" rx="1.5" fill="#96a688" opacity="0.4"/><rect x="18" y="42" width="16" height="3" rx="1.5" fill="#96a688" opacity="0.4"/><circle cx="46" cy="46" r="10" fill="#7a8d6b"/><path d="M42 46l3 3 6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+      cbt: `<svg viewBox="0 0 64 64" class="w-12 h-12"><defs><linearGradient id="cbtGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#e9e5f0"/><stop offset="100%" style="stop-color:#d9d2e5"/></linearGradient></defs><circle cx="32" cy="28" r="20" fill="url(#cbtGrad)"/><ellipse cx="32" cy="28" rx="14" ry="10" fill="none" stroke="#ab99c2" stroke-width="2"/><circle cx="26" cy="26" r="2" fill="#7a8d6b"/><circle cx="38" cy="26" r="2" fill="#7a8d6b"/><path d="M26 32c2 3 8 3 10 0" stroke="#7a8d6b" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M20 48l4-8h16l4 8" fill="#ab99c2" opacity="0.3"/><rect x="24" y="50" width="16" height="6" rx="2" fill="#7a8d6b"/></svg>`,
+      dbt: `<svg viewBox="0 0 64 64" class="w-12 h-12"><defs><linearGradient id="dbtGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#d4dace"/><stop offset="100%" style="stop-color:#b5c0ab"/></linearGradient></defs><circle cx="32" cy="32" r="26" fill="url(#dbtGrad)" opacity="0.3"/><path d="M32 10v12M32 42v12M10 32h12M42 32h12" stroke="#7a8d6b" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="32" r="10" fill="white" stroke="#7a8d6b" stroke-width="2"/><path d="M28 32l3 3 6-6" stroke="#7a8d6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+      retreat: `<svg viewBox="0 0 64 64" class="w-12 h-12"><defs><linearGradient id="retGrad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#b5c0ab"/><stop offset="100%" style="stop-color:#7a8d6b"/></linearGradient></defs><path d="M8 56l24-40 24 40z" fill="url(#retGrad)" opacity="0.3"/><path d="M16 56l16-28 16 28" fill="#96a688" opacity="0.5"/><circle cx="32" cy="16" r="6" fill="#f5e8d4" stroke="#e4c8b8" stroke-width="2"/><path d="M4 56h56" stroke="#7a8d6b" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="48" r="3" fill="#7a8d6b"/><circle cx="44" cy="48" r="3" fill="#7a8d6b"/></svg>`,
+      lotus: `<svg viewBox="0 0 120 100" class="w-full h-full max-h-48"><defs><linearGradient id="lotusGrad1" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#d9d2e5"/><stop offset="100%" style="stop-color:#c4b8d6"/></linearGradient><linearGradient id="lotusGrad2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#b5c0ab"/><stop offset="100%" style="stop-color:#96a688"/></linearGradient></defs><ellipse cx="60" cy="85" rx="40" ry="8" fill="#7a8d6b" opacity="0.2"/><path d="M60 80c-8-20-30-35-30-50c0-10 12-20 30-20s30 10 30 20c0 15-22 30-30 50z" fill="url(#lotusGrad2)" opacity="0.6"/><path d="M60 75c-5-15-20-25-25-40c0-8 10-18 25-18s25 10 25 18c0 15-20 25-25 40z" fill="url(#lotusGrad1)" opacity="0.7"/><path d="M60 70c-3-12-15-20-18-32c0-6 8-14 18-14s18 8 18 14c0 12-15 20-18 32z" fill="#d9d2e5"/><path d="M60 65c-2-10-10-15-12-24c0-4 5-10 12-10s12 6 12 10c0 9-10 14-12 24z" fill="white" opacity="0.8"/><circle cx="60" cy="45" r="4" fill="#ab99c2"/></svg>`
+    };
+
+    // ============ PAGE RENDERERS ============
+    function renderLanding() {
+      const main = document.getElementById('main-content');
+      const config = window.elementSdk?.config || defaultConfig;
+      main.innerHTML = `
+        <div class="fade-in">
+          <!-- Hero Section -->
+          <section class="relative overflow-hidden bg-gradient-to-br from-cream-50 via-lavender-50 to-sage-50 py-16 sm:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="text-center lg:text-left">
+                  <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-semibold text-sage-800 mb-6 brand-name">${config.brand_name || defaultConfig.brand_name}</h1>
+                  <p id="hero-headline" class="text-lg sm:text-xl text-sage-600 leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0">${config.hero_headline || defaultConfig.hero_headline}</p>
+                  <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <button id="hero-cta" onclick="navigate('signup')" class="px-8 py-4 bg-sage-600 hover:bg-sage-700 text-white font-medium rounded-full transition-all transform hover:scale-105 shadow-lg">${config.cta_text || defaultConfig.cta_text}</button>
+                    <a href="#practices" class="px-8 py-4 text-sage-700 font-medium hover:text-sage-500 transition-colors">Explore Practices →</a>
+                  </div>
+                </div>
+                <div class="flex justify-center lg:justify-end">
+                  <div class="w-64 h-64 sm:w-80 sm:h-80">${icons.lotus}</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Feature Grid -->
+          <section class="py-16 sm:py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-sage-800 text-center mb-4">Your Wellness Toolkit</h2>
+              <p class="text-sage-600 text-center mb-12 max-w-2xl mx-auto">Everything you need for daily self-care, all in one calm space.</p>
+              <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                ${[
+                  { icon: 'meditation', title: 'Meditation', desc: 'Guided sessions from 5–25 minutes', anchor: 'meditation' },
+                  { icon: 'breathwork', title: 'Breathwork', desc: 'Quick breathing patterns for calm + focus', anchor: 'breathwork' },
+                  { icon: 'checkin', title: 'Mood Check-In', desc: 'Track stress + sleep in seconds', anchor: 'checkin' },
+                  { icon: 'cbt', title: 'CBT Tools', desc: 'Thought prompts to reset your mindset', anchor: 'cbt' },
+                  { icon: 'dbt', title: 'DBT Skills', desc: 'Grounding skills for emotional balance', anchor: 'dbt' },
+                  { icon: 'retreat', title: 'Retreats', desc: 'Exclusive wellness experiences + aftercare', anchor: 'retreats' }
+                ].map(f => `
+                  <button onclick="navigate('practices', {section: '${f.anchor}'})" class="icon-glass rounded-2xl p-6 text-left hover:shadow-xl transition-all transform hover:-translate-y-1 group">
+                    <div class="mb-4">${icons[f.icon]}</div>
+                    <h3 class="font-serif text-xl font-semibold text-sage-800 mb-2 group-hover:text-sage-600 transition-colors">${f.title}</h3>
+                    <p class="text-sage-600 text-sm">${f.desc}</p>
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          </section>
+
+          <!-- How It Works -->
+          <section class="py-16 sm:py-20 bg-gradient-to-b from-sage-50 to-cream-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-sage-800 text-center mb-12">How It Works</h2>
+              <div class="grid sm:grid-cols-3 gap-8">
+                ${[
+                  { num: '1', title: 'Choose your focus', desc: 'Select from meditation, breathwork, mood tracking, or therapeutic tools.' },
+                  { num: '2', title: 'Practice daily', desc: 'Build consistency with gentle reminders and short, accessible sessions.' },
+                  { num: '3', title: 'Track your progress', desc: 'Watch your streak grow and celebrate your wellness journey.' }
+                ].map(s => `
+                  <div class="text-center">
+                    <div class="w-16 h-16 rounded-full bg-sage-600 text-white font-serif text-2xl font-semibold flex items-center justify-center mx-auto mb-4">${s.num}</div>
+                    <h3 class="font-serif text-xl font-semibold text-sage-800 mb-2">${s.title}</h3>
+                    <p class="text-sage-600">${s.desc}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </section>
+
+          <!-- Testimonial -->
+          <section class="py-16 sm:py-20 bg-white">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+              <div class="glass-card rounded-3xl p-8 sm:p-12">
+                <svg class="w-12 h-12 text-lavender-400 mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                <blockquote class="font-serif text-xl sm:text-2xl text-sage-700 italic mb-6">"Balancedbyaliyah helped me build a calm routine that actually sticks."</blockquote>
+                <p class="text-sage-500 font-medium">— Community Member</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Pricing Preview -->
+          <section class="py-16 sm:py-20 bg-gradient-to-b from-lavender-50 to-cream-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+              <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-sage-800 mb-4">Start Free, Grow at Your Pace</h2>
+              <p class="text-sage-600 mb-8 max-w-2xl mx-auto">Choose the plan that fits your wellness journey. No pressure, just support.</p>
+              <button onclick="navigate('pricing')" class="px-8 py-4 bg-lavender-500 hover:bg-lavender-600 text-white font-medium rounded-full transition-all shadow-lg">View Plans</button>
+            </div>
+          </section>
+        </div>
+      `;
+    }
+
+    function renderLogin() {
+      const main = document.getElementById('main-content');
+      main.innerHTML = `
+        <div class="fade-in min-h-[calc(100%-4rem)] flex items-center justify-center py-12 px-4">
+          <div class="glass-card rounded-3xl p-8 sm:p-12 w-full max-w-md">
+            <h1 class="font-serif text-3xl font-semibold text-sage-800 text-center mb-2">Welcome Back</h1>
+            <p class="text-sage-600 text-center mb-8">Sign in to continue your journey</p>
+            <form id="login-form" class="space-y-6">
+              <div>
+                <label for="login-email" class="block text-sm font-medium text-sage-700 mb-2">Email</label>
+                <input type="email" id="login-email" required class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors" placeholder="you@example.com">
+              </div>
+              <div>
+                <label for="login-password" class="block text-sm font-medium text-sage-700 mb-2">Password</label>
+                <input type="password" id="login-password" required class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors" placeholder="••••••••">
+              </div>
+              <button type="submit" class="w-full py-4 bg-sage-600 hover:bg-sage-700 text-white font-medium rounded-xl transition-all">Sign In</button>
+            </form>
+            <p class="text-center mt-6 text-sage-600">Don't have an account? <a href="#signup" class="text-sage-700 font-medium hover:underline">Sign up</a></p>
+          </div>
+        </div>
+      `;
+      document.getElementById('login-form').addEventListener('submit', handleLogin);
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      
+      const users = JSON.parse(localStorage.getItem('bba_users') || '[]');
+      const user = users.find(u => u.email === email && u.password === password);
+      
+      if (user) {
+        setUser(user);
+        navigate('dashboard');
+        showToast(`Welcome back, ${user.name}!`);
+      } else {
+        showToast('Invalid email or password', 'error');
+      }
+    }
+
+    function renderSignup() {
+      const main = document.getElementById('main-content');
+      main.innerHTML = `
+        <div class="fade-in min-h-[calc(100%-4rem)] flex items-center justify-center py-12 px-4">
+          <div class="glass-card rounded-3xl p-8 sm:p-12 w-full max-w-md">
+            <h1 class="font-serif text-3xl font-semibold text-sage-800 text-center mb-2">Begin Your Journey</h1>
+            <p class="text-sage-600 text-center mb-8">Create your wellness account</p>
+            <form id="signup-form" class="space-y-6">
+              <div>
+                <label for="signup-name" class="block text-sm font-medium text-sage-700 mb-2">Name <span class="text-sage-500 font-normal">(real name preferred, or use a nickname)</span></label>
+                <input type="text" id="signup-name" required class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors" placeholder="How should we call you?">
+              </div>
+              <div>
+                <label for="signup-email" class="block text-sm font-medium text-sage-700 mb-2">Email</label>
+                <input type="email" id="signup-email" required class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors" placeholder="you@example.com">
+              </div>
+              <div>
+                <label for="signup-password" class="block text-sm font-medium text-sage-700 mb-2">Password</label>
+                <input type="password" id="signup-password" required minlength="6" class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors" placeholder="At least 6 characters">
+              </div>
+              <div>
+                <label for="signup-plan" class="block text-sm font-medium text-sage-700 mb-2">Choose Your Plan</label>
+                <select id="signup-plan" class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors">
+                  <option value="free">Free — Basic access</option>
+                  <option value="standard">Standard — $9.99/mo</option>
+                  <option value="premium">Premium — $19.99/mo</option>
+                </select>
+              </div>
+              <button type="submit" class="w-full py-4 bg-sage-600 hover:bg-sage-700 text-white font-medium rounded-xl transition-all">Create Account</button>
+            </form>
+            <p class="text-center mt-6 text-sage-600">Already have an account? <a href="#login" class="text-sage-700 font-medium hover:underline">Sign in</a></p>
+          </div>
+        </div>
+      `;
+      document.getElementById('signup-form').addEventListener('submit', handleSignup);
+    }
+
+    function handleSignup(e) {
+      e.preventDefault();
+      const name = document.getElementById('signup-name').value;
+      const email = document.getElementById('signup-email').value;
+      const password = document.getElementById('signup-password').value;
+      const plan = document.getElementById('signup-plan').value;
+      
+      const users = JSON.parse(localStorage.getItem('bba_users') || '[]');
+      if (users.find(u => u.email === email)) {
+        showToast('An account with this email already exists', 'error');
+        return;
+      }
+      
+      const newUser = { name, email, password, plan, joined: new Date().toISOString() };
+      users.push(newUser);
+      localStorage.setItem('bba_users', JSON.stringify(users));
+      setUser(newUser);
+      navigate('dashboard');
+      showToast(`Welcome to Balancedbyaliyah, ${name}!`);
+    }
+
+    function renderDashboard() {
+      if (!currentUser) { navigate('login'); return; }
+      const main = document.getElementById('main-content');
+      const streak = getStreak();
+      const affirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
+      
+      main.innerHTML = `
+        <div class="fade-in py-8 sm:py-12">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Welcome -->
+            <div class="mb-8">
+              <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-sage-800 mb-2">Welcome, ${currentUser.name}</h1>
+              <p class="text-sage-600">Your calm space awaits</p>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              <div class="glass-card rounded-2xl p-6">
+                <p class="text-sm text-sage-500 mb-1">Current Streak</p>
+                <p class="font-serif text-4xl font-semibold text-sage-800">${streak} <span class="text-lg font-normal">days</span></p>
+              </div>
+              <div class="glass-card rounded-2xl p-6">
+                <p class="text-sm text-sage-500 mb-1">Your Plan</p>
+                <p class="font-serif text-2xl font-semibold text-sage-800 capitalize">${currentUser.plan}</p>
+              </div>
+              <div class="glass-card rounded-2xl p-6 sm:col-span-2 lg:col-span-1">
+                <p class="text-sm text-sage-500 mb-1">Today's Intention</p>
+                <p class="font-serif text-lg text-sage-700 italic">"${affirmation}"</p>
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <h2 class="font-serif text-2xl font-semibold text-sage-800 mb-6">Quick Actions</h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-12">
+              ${[
+                { icon: 'meditation', title: 'Meditation', page: 'practices', section: 'meditation' },
+                { icon: 'breathwork', title: 'Breathwork', page: 'practices', section: 'breathwork' },
+                { icon: 'checkin', title: 'Mood Check-In', page: 'practices', section: 'checkin' },
+                { icon: 'retreat', title: 'Events', page: 'events', section: '' },
+                { icon: 'retreat', title: 'Retreats', page: 'retreats', section: '' }
+              ].map(a => `
+                <button onclick="navigate('${a.page}'${a.section ? `, {section: '${a.section}'}` : ''})" class="icon-glass rounded-2xl p-6 text-center hover:shadow-lg transition-all group">
+                  <div class="flex justify-center mb-3">${icons[a.icon]}</div>
+                  <p class="font-medium text-sage-700 group-hover:text-sage-500 transition-colors">${a.title}</p>
+                </button>
+              `).join('')}
+            </div>
+
+            <!-- Recent Activity -->
+            <h2 class="font-serif text-2xl font-semibold text-sage-800 mb-6">Recent Activity</h2>
+            <div id="recent-activity" class="space-y-3">
+              ${renderRecentActivity()}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRecentActivity() {
+      const recent = appData
+        .filter(d => d.userId === currentUser?.email)
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 5);
+      
+      if (recent.length === 0) {
+        return '<p class="text-sage-500 italic">No activity yet. Start a practice to see your progress!</p>';
+      }
+      
+      return recent.map(item => {
+        let label = '';
+        if (item.type === 'checkin') label = `Mood check-in: Stress ${item.stress}/10, Sleep ${item.sleep}/10`;
+        else if (item.type === 'cbt') label = `CBT thought record completed`;
+        else if (item.type === 'dbt') label = `DBT skill practiced: ${item.skill}`;
+        else if (item.type === 'meditation') label = `Meditation: ${item.duration} minutes`;
+        else if (item.type === 'breathwork') label = `Breathwork session completed`;
+        else if (item.type === 'challenge') label = `Challenge progress updated`;
+        
+        return `
+          <div class="glass-card rounded-xl p-4 flex justify-between items-center">
+            <p class="text-sage-700">${label}</p>
+            <p class="text-sm text-sage-500">${new Date(item.date).toLocaleDateString()}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderPricing() {
+      const main = document.getElementById('main-content');
+      const plans = [
+        { name: 'Free', price: '$0', period: 'forever', features: ['5-minute meditations', 'Basic breathwork', 'Daily mood check-in', 'Community access'], cta: 'Start Free', highlighted: false },
+        { name: 'Standard', price: '$9.99', period: '/month', features: ['All meditation lengths', 'All breathwork patterns', 'CBT & DBT tools', 'Progress tracking', 'Event discounts'], cta: 'Go Standard', highlighted: true },
+        { name: 'Premium', price: '$19.99', period: '/month', features: ['Everything in Standard', 'Exclusive retreats access', 'Aftercare support', '1-on-1 guidance', 'Priority event booking'], cta: 'Go Premium', highlighted: false }
+      ];
+      
+      main.innerHTML = `
+        <div class="fade-in py-12 sm:py-20">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+              <h1 class="font-serif text-4xl sm:text-5xl font-semibold text-sage-800 mb-4">Choose Your Path</h1>
+              <p class="text-sage-600 text-lg max-w-2xl mx-auto">Invest in your well-being with a plan that grows with you.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              ${plans.map(p => `
+                <div class="${p.highlighted ? 'bg-sage-600 text-white scale-105' : 'glass-card'} rounded-3xl p-8 ${p.highlighted ? '' : 'border border-cream-200'}">
+                  <h3 class="font-serif text-2xl font-semibold ${p.highlighted ? 'text-white' : 'text-sage-800'} mb-2">${p.name}</h3>
+                  <div class="mb-6">
+                    <span class="font-serif text-4xl font-bold">${p.price}</span>
+                    <span class="${p.highlighted ? 'text-sage-200' : 'text-sage-500'}">${p.period}</span>
+                  </div>
+                  <ul class="space-y-3 mb-8">
+                    ${p.features.map(f => `
+                      <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 mt-0.5 flex-shrink-0 ${p.highlighted ? 'text-sage-200' : 'text-sage-500'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <span class="${p.highlighted ? 'text-sage-100' : 'text-sage-600'}">${f}</span>
+                      </li>
+                    `).join('')}
+                  </ul>
+                  <button onclick="navigate('signup')" class="w-full py-3 rounded-xl font-medium transition-all ${p.highlighted ? 'bg-white text-sage-700 hover:bg-sage-50' : 'bg-sage-600 text-white hover:bg-sage-700'}">${p.cta}</button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPractices() {
+      if (!currentUser) { navigate('login'); return; }
+      const main = document.getElementById('main-content');
+      const { params } = getHashParams();
+      
+      main.innerHTML = `
+        <div class="fade-in py-8 sm:py-12">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-sage-800 mb-8">Your Practices</h1>
+            
+            <!-- Practice Navigation -->
+            <div class="flex flex-wrap gap-2 mb-8">
+              ${['meditation', 'breathwork', 'checkin', 'cbt', 'dbt'].map(s => `
+                <button onclick="scrollToSection('${s}')" class="px-4 py-2 rounded-full text-sm font-medium ${params.section === s ? 'bg-sage-600 text-white' : 'bg-cream-100 text-sage-700 hover:bg-cream-200'} transition-colors">${s === 'checkin' ? 'Mood Check-In' : s === 'cbt' ? 'CBT Tools' : s === 'dbt' ? 'DBT Skills' : s.charAt(0).toUpperCase() + s.slice(1)}</button>
+              `).join('')}
+            </div>
+
+            <!-- Meditation Section -->
+            <section id="meditation" class="mb-12 scroll-mt-24">
+              <h2 class="font-serif text-2xl font-semibold text-sage-800 mb-6 flex items-center gap-3">
+                ${icons.meditation}
+                Guided Meditations
+              </h2>
+              <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                ${meditations.map(m => `
+                  <div class="glass-card rounded-2xl p-6">
+                    <h3 class="font-serif text-lg font-semibold text-sage-800 mb-1">${m.title}</h3>
+                    <p class="text-sage-600 text-sm mb-3">${m.description}</p>
+                    <div class="flex justify-between items-center">
+                      <span class="text-sage-500 text-sm">${m.duration} min</span>
+                      <button onclick="startMeditation('${m.id}', ${m.duration})" class="px-4 py-2 bg-sage-600 hover:bg-sage-700 text-white text-sm font-medium rounded-lg transition-colors">Start</button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </section>
+
+            <!-- Breathwork Section -->
+            <section id="breathwork" class="mb-12 scroll-mt-24">
+              <h2 class="font-serif text-2xl font-semibold text-sage-800 mb-6 flex items-center gap-3">
+                ${icons.breathwork}
+                Breathwork
+              </h2>
+              <div class="grid lg:grid-cols-2 gap-6">
+                <div class="glass-card rounded-2xl p-6">
+                  <h3 class="font-medium text-sage-700 mb-4">Choose a Pattern</h3>
+                  <div class="space-y-3">
+                    ${breathPatterns.map(p => `
+                      <button onclick="selectBreathPattern('${p.id}')" class="w-full text-left p-4 rounded-xl border border-cream-200 hover:border-sage-400 hover:bg-sage-50 transition-all breath-pattern-btn" data-pattern="${p.id}">
+                        <p class="font-medium text-sage-800">${p.name}</p>
+                        <p class="text-sm text-sage-500">${p.desc}</p>
+                      </button>
+                    `).join('')}
+                  </div>
+                </div>
+                <div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-center min-h-[300px]">
+                  <div id="breath-circle" class="w-32 h-32 rounded-full bg-gradient-to-br from-sage-400 to-sage-600 flex items-center justify-center mb-6">
+                    <span id="breath-instruction" class="text-white font-medium text-lg">Ready</span>
+                  </div>
+                  <p id="breath-timer" class="text-2xl font-serif text-sage-800 mb-4">0:00</p>
+                  <div class="flex gap-3">
+                    <button id="breath-start-btn" onclick="startBreathing()" class="px-6 py-3 bg-sage-600 hover:bg-sage-700 text-white font-medium rounded-xl transition-colors">Start</button>
+                    <button id="breath-stop-btn" onclick="stopBreathing()" class="px-6 py-3 bg-cream-200 hover:bg-cream-300 text-sage-700 font-medium rounded-xl transition-colors hidden">Stop</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Mood Check-In Section -->
+            <section id="checkin" class="mb-12 scroll-mt-24">
+              <h2 class="font-serif text-2xl font-semibold text-sage-800 mb-6 flex items-center gap-3">
+                ${icons.checkin}
+                Mood Check-In
+              </h2>
+              <div class="grid lg:grid-cols-2 gap-6">
+                <div class="glass-card rounded-2xl p-6">
+                  <h3 class="font-medium text-sage-700 mb-6">How are you feeling today?</h3>
+                  <form id="checkin-form" class="space-y-6">
+                    <div>
+                      <label class="block text-sm font-medium text-sage-700 mb-2">Stress Level: <span id="stress-value">5</span>/10</label>
+                      <input type="range" id="stress-slider" min="1" max="10" value="5" class="w-full accent-sage-600" oninput="document.getElementById('stress-value').textContent = this.value">
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-sage-700 mb-2">Sleep Quality: <span id="sleep-value">5</span>/10</label>
+                      <input type="range" id="sleep-slider" min="1" max="10" value="5" class="w-full accent-sage-600" oninput="document.getElementById('sleep-value').textContent = this.value">
+                    </div>
+                    <div>
+                      <label for="mood-notes" class="block text-sm font-medium text-sage-700 mb-2">Notes (optional)</label>
+                      <textarea id="mood-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors resize-none" placeholder="How are you feeling emotionally?"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-sage-600 hover:bg-sage-700 text-white font-medium rounded-xl transition-colors">Save Check-In</button>
+                  </form>
+                </div>
+                <div class="glass-card rounded-2xl p-6">
+                  <h3 class="font-medium text-sage-700 mb-4">Recent Check-Ins</h3>
+                  <div id="checkin-history" class="space-y-3 max-h-80 overflow-y-auto">
+                    ${renderCheckInHistory()}
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- CBT Section -->
+            <section id="cbt" class="mb-12 scroll-mt-24">
+              <h2 class="font-serif text-2xl font-semibold text-sage-800 mb-6 flex items-center gap-3">
+                ${icons.cbt}
+                CBT Tools — Thought Record
+              </h2>
+              <div class="glass-card rounded-2xl p-6">
+                <p class="text-sage-600 mb-6">Challenge negative thoughts by examining the evidence. This technique helps reshape automatic thinking patterns.</p>
+                <form id="cbt-form" class="space-y-4">
+                  <div>
+                    <label for="cbt-situation" class="block text-sm font-medium text-sage-700 mb-2">Situation</label>
+                    <input type="text" id="cbt-situation" class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors" placeholder="What happened?">
+                  </div>
+                  <div>
+                    <label for="cbt-thought" class="block text-sm font-medium text-sage-700 mb-2">Automatic Thought</label>
+                    <input type="text" id="cbt-thought" class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors" placeholder="What went through your mind?">
+                  </div>
+                  <div class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <label for="cbt-for" class="block text-sm font-medium text-sage-700 mb-2">Evidence For</label>
+                      <textarea id="cbt-for" rows="3" class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors resize-none" placeholder="What supports this thought?"></textarea>
+                    </div>
+                    <div>
+                      <label for="cbt-against" class="block text-sm font-medium text-sage-700 mb-2">Evidence Against</label>
+                      <textarea id="cbt-against" rows="3" class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors resize-none" placeholder="What contradicts this thought?"></textarea>
+                    </div>
+                  </div>
+                  <div>
+                    <label for="cbt-balanced" class="block text-sm font-medium text-sage-700 mb-2">Balanced Thought</label>
+                    <textarea id="cbt-balanced" rows="2" class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors resize-none" placeholder="A more balanced perspective..."></textarea>
+                  </div>
+                  <button type="submit" class="px-6 py-3 bg-sage-600 hover:bg-sage-700 text-white font-medium rounded-xl transition-colors">Save Thought Record</button>
+                </form>
+              </div>
+            </section>
+
+            <!-- DBT Section -->
+            <section id="dbt" class="mb-12 scroll-mt-24">
+              <h2 class="font-serif text-2xl font-semibold text-sage-800 mb-6 flex items-center gap-3">
+                ${icons.dbt}
+                DBT Skills
+              </h2>
+              <div class="grid sm:grid-cols-2 gap-4">
+                ${dbtSkills.map(skill => `
+                  <div class="glass-card rounded-2xl p-6">
+                    <h3 class="font-serif text-xl font-semibold text-sage-800 mb-1">${skill.name}</h3>
+                    <p class="text-sm text-lavender-500 font-medium mb-2">${skill.full}</p>
+                    <p class="text-sage-600 text-sm mb-4">${skill.desc}</p>
+                    <button onclick="openDbtModal('${skill.id}')" class="px-4 py-2 bg-lavender-500 hover:bg-lavender-600 text-white text-sm font-medium rounded-lg transition-colors">Log Practice</button>
+                  </div>
+                `).join('')}
+              </div>
+            </section>
+          </div>
+        </div>
+        
+        <!-- DBT Modal -->
+        <div id="dbt-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
+          <div class="bg-white rounded-2xl p-6 max-w-md w-full">
+            <h3 id="dbt-modal-title" class="font-serif text-xl font-semibold text-sage-800 mb-4"></h3>
+            <form id="dbt-form">
+              <input type="hidden" id="dbt-skill-id">
+              <div class="mb-4">
+                <label for="dbt-notes" class="block text-sm font-medium text-sage-700 mb-2">Practice Notes</label>
+                <textarea id="dbt-notes" rows="4" class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors resize-none" placeholder="How did you apply this skill?"></textarea>
+              </div>
+              <div class="flex gap-3">
+                <button type="submit" class="flex-1 py-3 bg-sage-600 hover:bg-sage-700 text-white font-medium rounded-xl transition-colors">Save</button>
+                <button type="button" onclick="closeDbtModal()" class="flex-1 py-3 bg-cream-200 hover:bg-cream-300 text-sage-700 font-medium rounded-xl transition-colors">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      `;
+      
+      // Setup form handlers
+      document.getElementById('checkin-form').addEventListener('submit', handleCheckIn);
+      document.getElementById('cbt-form').addEventListener('submit', handleCbt);
+      document.getElementById('dbt-form').addEventListener('submit', handleDbt);
+      
+      // Scroll to section if specified
+      if (params.section) {
+        setTimeout(() => scrollToSection(params.section), 100);
+      }
+    }
+
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function renderCheckInHistory() {
+      const checkIns = getUserData('checkin').sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
+      if (checkIns.length === 0) {
+        return '<p class="text-sage-500 italic text-sm">No check-ins yet. Start tracking your mood!</p>';
+      }
+      return checkIns.map(c => `
+        <div class="p-3 bg-cream-50 rounded-lg">
+          <div class="flex justify-between text-sm mb-1">
+            <span class="text-sage-700">Stress: ${c.stress}/10 • Sleep: ${c.sleep}/10</span>
+            <span class="text-sage-500">${new Date(c.date).toLocaleDateString()}</span>
+          </div>
+          ${c.notes ? `<p class="text-sage-600 text-sm">${c.notes}</p>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function updatePracticesData() {
+      const historyEl = document.getElementById('checkin-history');
+      if (historyEl) {
+        historyEl.innerHTML = renderCheckInHistory();
+      }
+    }
+
+    async function handleCheckIn(e) {
+      e.preventDefault();
+      if (appData.length >= 999) {
+        showToast('Storage limit reached. Please contact support.', 'warning');
+        return;
+      }
+      
+      const stress = parseInt(document.getElementById('stress-slider').value);
+      const sleep = parseInt(document.getElementById('sleep-slider').value);
+      const notes = document.getElementById('mood-notes').value;
+      
+      const result = await window.dataSdk.create({
+        type: 'checkin',
+        userId: currentUser.email,
+        date: new Date().toISOString(),
+        stress,
+        sleep,
+        notes
+      });
+      
+      if (result.isOk) {
+        showToast('Mood check-in saved!');
+        document.getElementById('mood-notes').value = '';
+      } else {
+        showToast('Failed to save check-in', 'error');
+      }
+    }
+
+    async function handleCbt(e) {
+      e.preventDefault();
+      if (appData.length >= 999) {
+        showToast('Storage limit reached. Please contact support.', 'warning');
+        return;
+      }
+      
+      const situation = document.getElementById('cbt-situation').value;
+      const thought = document.getElementById('cbt-thought').value;
+      const evidenceFor = document.getElementById('cbt-for').value;
+      const evidenceAgainst = document.getElementById('cbt-against').value;
+      const balancedThought = document.getElementById('cbt-balanced').value;
+      
+      if (!situation || !thought) {
+        showToast('Please fill in the situation and thought', 'warning');
+        return;
+      }
+      
+      const result = await window.dataSdk.create({
+        type: 'cbt',
+        userId: currentUser.email,
+        date: new Date().toISOString(),
+        situation,
+        thought,
+        evidenceFor,
+        evidenceAgainst,
+        balancedThought
+      });
+      
+      if (result.isOk) {
+        showToast('Thought record saved!');
+        e.target.reset();
+      } else {
+        showToast('Failed to save thought record', 'error');
+      }
+    }
+
+    function openDbtModal(skillId) {
+      const skill = dbtSkills.find(s => s.id === skillId);
+      document.getElementById('dbt-modal-title').textContent = `Log ${skill.name} Practice`;
+      document.getElementById('dbt-skill-id').value = skillId;
+      document.getElementById('dbt-modal').classList.remove('hidden');
+    }
+
+    function closeDbtModal() {
+      document.getElementById('dbt-modal').classList.add('hidden');
+      document.getElementById('dbt-notes').value = '';
+    }
+
+    async function handleDbt(e) {
+      e.preventDefault();
+      if (appData.length >= 999) {
+        showToast('Storage limit reached. Please contact support.', 'warning');
+        return;
+      }
+      
+      const skillId = document.getElementById('dbt-skill-id').value;
+      const notes = document.getElementById('dbt-notes').value;
+      const skill = dbtSkills.find(s => s.id === skillId);
+      
+      const result = await window.dataSdk.create({
+        type: 'dbt',
+        userId: currentUser.email,
+        date: new Date().toISOString(),
+        skill: skill.name,
+        practiceNotes: notes
+      });
+      
+      if (result.isOk) {
+        showToast(`${skill.name} practice logged!`);
+        closeDbtModal();
+      } else {
+        showToast('Failed to save practice', 'error');
+      }
+    }
+
+    // Breathing functions
+    let selectedPattern = breathPatterns[0];
+    let breathPhase = 0;
+    let breathSeconds = 0;
+
+    function selectBreathPattern(patternId) {
+      selectedPattern = breathPatterns.find(p => p.id === patternId);
+      document.querySelectorAll('.breath-pattern-btn').forEach(btn => {
+        if (btn.dataset.pattern === patternId) {
+          btn.classList.add('border-sage-500', 'bg-sage-50');
+        } else {
+          btn.classList.remove('border-sage-500', 'bg-sage-50');
+        }
+      });
+    }
+
+    function startBreathing() {
+      document.getElementById('breath-start-btn').classList.add('hidden');
+      document.getElementById('breath-stop-btn').classList.remove('hidden');
+      breathPhase = 0;
+      breathSeconds = 0;
+      runBreathCycle();
+    }
+
+    function runBreathCycle() {
+      const phases = [
+        { name: 'Inhale', duration: selectedPattern.inhale },
+        { name: 'Hold', duration: selectedPattern.hold1 },
+        { name: 'Exhale', duration: selectedPattern.exhale },
+        { name: 'Hold', duration: selectedPattern.hold2 }
+      ].filter(p => p.duration > 0);
+      
+      let phaseIndex = 0;
+      let phaseTime = 0;
+      
+      breathingInterval = setInterval(() => {
+        breathSeconds++;
+        phaseTime++;
+        
+        const currentPhase = phases[phaseIndex];
+        document.getElementById('breath-instruction').textContent = currentPhase.name;
+        document.getElementById('breath-timer').textContent = formatTime(breathSeconds);
+        
+        // Animate circle
+        const circle = document.getElementById('breath-circle');
+        if (currentPhase.name === 'Inhale') {
+          circle.style.transform = `scale(${1 + (phaseTime / currentPhase.duration) * 0.3})`;
+        } else if (currentPhase.name === 'Exhale') {
+          circle.style.transform = `scale(${1.3 - (phaseTime / currentPhase.duration) * 0.3})`;
+        }
+        
+        if (phaseTime >= currentPhase.duration) {
+          phaseTime = 0;
+          phaseIndex = (phaseIndex + 1) % phases.length;
+        }
+      }, 1000);
+    }
+
+    function stopBreathing() {
+      clearInterval(breathingInterval);
+      document.getElementById('breath-start-btn').classList.remove('hidden');
+      document.getElementById('breath-stop-btn').classList.add('hidden');
+      document.getElementById('breath-instruction').textContent = 'Ready';
+      document.getElementById('breath-circle').style.transform = 'scale(1)';
+      
+      if (breathSeconds > 30) {
+        logBreathwork();
+      }
+    }
+
+    async function logBreathwork() {
+      if (appData.length >= 999) return;
+      await window.dataSdk.create({
+        type: 'breathwork',
+        userId: currentUser.email,
+        date: new Date().toISOString(),
+        practiceType: selectedPattern.name,
+        duration: breathSeconds
+      });
+      showToast('Breathwork session logged!');
+    }
+
+    async function startMeditation(id, duration) {
+      if (appData.length >= 999) {
+        showToast('Storage limit reached', 'warning');
+        return;
+      }
+      await window.dataSdk.create({
+        type: 'meditation',
+        userId: currentUser.email,
+        date: new Date().toISOString(),
+        practiceType: id,
+        duration
+      });
+      showToast(`${duration}-minute meditation started. Find a quiet space and breathe.`);
+    }
+
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function renderEvents() {
+      if (!currentUser) { navigate('login'); return; }
+      const main = document.getElementById('main-content');
+      
+      main.innerHTML = `
+        <div class="fade-in py-8 sm:py-12">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+              <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-sage-800 mb-2">Local Wellness Events</h1>
+              <p class="text-sage-600">Curated experiences to deepen your practice</p>
+            </div>
+            
+            <!-- Aliyah's Picks -->
+            <div class="mb-12">
+              <h2 class="font-serif text-2xl font-semibold text-sage-800 mb-4 flex items-center gap-2">
+                <span class="text-lavender-500">✨</span> Aliyah Recommended This For You
+              </h2>
+              <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                ${events.filter(e => e.aliyahPick).map(e => renderEventCard(e, true)).join('')}
+              </div>
+            </div>
+            
+            <!-- All Events -->
+            <div>
+              <h2 class="font-serif text-2xl font-semibold text-sage-800 mb-4">All Upcoming Events</h2>
+              <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                ${events.map(e => renderEventCard(e, false)).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderEventCard(event, showBadge) {
+      return `
+        <button onclick="navigate('event-detail', {id: '${event.id}'})" class="glass-card rounded-2xl p-6 text-left hover:shadow-lg transition-all group">
+          ${showBadge && event.aliyahPick ? '<span class="inline-block px-3 py-1 bg-lavender-100 text-lavender-600 text-xs font-medium rounded-full mb-3">Aliyah\'s Pick</span>' : ''}
+          <h3 class="font-serif text-xl font-semibold text-sage-800 mb-2 group-hover:text-sage-600 transition-colors">${event.title}</h3>
+          <p class="text-sage-600 text-sm mb-3">${event.desc}</p>
+          <div class="space-y-1 text-sm text-sage-500">
+            <p>📅 ${new Date(event.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
+            <p>🕐 ${event.time}</p>
+            <p>📍 ${event.location}</p>
+          </div>
+          <p class="mt-4 font-semibold text-sage-800">${event.price === 0 ? 'Free' : '$' + event.price}</p>
+        </button>
+      `;
+    }
+
+    function renderEventDetail() {
+      if (!currentUser) { navigate('login'); return; }
+      const { params } = getHashParams();
+      const event = events.find(e => e.id === params.id);
+      
+      if (!event) {
+        navigate('events');
+        return;
+      }
+      
+      const main = document.getElementById('main-content');
+      main.innerHTML = `
+        <div class="fade-in py-8 sm:py-12">
+          <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <button onclick="navigate('events')" class="flex items-center gap-2 text-sage-600 hover:text-sage-800 mb-6 transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+              Back to Events
+            </button>
+            
+            <div class="glass-card rounded-3xl p-8">
+              ${event.aliyahPick ? '<span class="inline-block px-3 py-1 bg-lavender-100 text-lavender-600 text-xs font-medium rounded-full mb-4">✨ Aliyah\'s Pick</span>' : ''}
+              <h1 class="font-serif text-3xl font-semibold text-sage-800 mb-4">${event.title}</h1>
+              <p class="text-sage-600 text-lg mb-6">${event.desc}</p>
+              
+              <div class="grid sm:grid-cols-2 gap-4 mb-8">
+                <div class="bg-cream-50 rounded-xl p-4">
+                  <p class="text-sm text-sage-500 mb-1">Date & Time</p>
+                  <p class="text-sage-800 font-medium">${new Date(event.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                  <p class="text-sage-800">${event.time}</p>
+                </div>
+                <div class="bg-cream-50 rounded-xl p-4">
+                  <p class="text-sm text-sage-500 mb-1">Location</p>
+                  <p class="text-sage-800 font-medium">${event.location}</p>
+                </div>
+              </div>
+              
+              <div class="flex items-center justify-between border-t border-cream-200 pt-6">
+                <div>
+                  <p class="text-sm text-sage-500">Price</p>
+                  <p class="font-serif text-3xl font-semibold text-sage-800">${event.price === 0 ? 'Free' : '$' + event.price}</p>
+                </div>
+                <button onclick="showToast('Registration coming soon!')" class="px-8 py-4 bg-sage-600 hover:bg-sage-700 text-white font-medium rounded-xl transition-colors">Register Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRetreats() {
+      if (!currentUser) { navigate('login'); return; }
+      const main = document.getElementById('main-content');
+      
+      main.innerHTML = `
+        <div class="fade-in py-8 sm:py-12">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+              <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-sage-800 mb-2">Wellness Retreats</h1>
+              <p class="text-sage-600">Immersive experiences with preparation guides and aftercare support</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              ${retreats.map(r => `
+                <button onclick="navigate('retreat-detail', {id: '${r.id}'})" class="glass-card rounded-3xl overflow-hidden text-left hover:shadow-xl transition-all group">
+                  <div class="h-40 bg-gradient-to-br from-sage-400 to-lavender-400 flex items-center justify-center">
+                    ${icons.retreat}
+                  </div>
+                  <div class="p-6">
+                    <h3 class="font-serif text-xl font-semibold text-sage-800 mb-2 group-hover:text-sage-600 transition-colors">${r.title}</h3>
+                    <p class="text-sage-600 text-sm mb-4">${r.desc}</p>
+                    <div class="space-y-1 text-sm text-sage-500 mb-4">
+                      <p>📅 ${r.dates}</p>
+                      <p>📍 ${r.location}</p>
+                      <p>👥 ${r.spots} spots available</p>
+                    </div>
+                    <p class="font-serif text-2xl font-semibold text-sage-800">$${r.price}</p>
+                  </div>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRetreatDetail() {
+      if (!currentUser) { navigate('login'); return; }
+      const { params } = getHashParams();
+      const retreat = retreats.find(r => r.id === params.id);
+      
+      if (!retreat) {
+        navigate('retreats');
+        return;
+      }
+      
+      const booking = getUserData('retreat-booking').find(b => b.retreatId === retreat.id);
+      
+      const main = document.getElementById('main-content');
+      main.innerHTML = `
+        <div class="fade-in py-8 sm:py-12">
+          <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <button onclick="navigate('retreats')" class="flex items-center gap-2 text-sage-600 hover:text-sage-800 mb-6 transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+              Back to Retreats
+            </button>
+            
+            <div class="glass-card rounded-3xl overflow-hidden">
+              <div class="h-48 sm:h-64 bg-gradient-to-br from-sage-500 via-sage-400 to-lavender-400 flex items-center justify-center">
+                <div class="w-32 h-32">${icons.retreat}</div>
+              </div>
+              
+              <div class="p-8">
+                <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-sage-800 mb-4">${retreat.title}</h1>
+                <p class="text-sage-600 text-lg mb-6">${retreat.desc}</p>
+                
+                <div class="grid sm:grid-cols-3 gap-4 mb-8">
+                  <div class="bg-cream-50 rounded-xl p-4">
+                    <p class="text-sm text-sage-500 mb-1">Dates</p>
+                    <p class="text-sage-800 font-medium">${retreat.dates}</p>
+                  </div>
+                  <div class="bg-cream-50 rounded-xl p-4">
+                    <p class="text-sm text-sage-500 mb-1">Location</p>
+                    <p class="text-sage-800 font-medium">${retreat.location}</p>
+                  </div>
+                  <div class="bg-cream-50 rounded-xl p-4">
+                    <p class="text-sm text-sage-500 mb-1">Availability</p>
+                    <p class="text-sage-800 font-medium">${retreat.spots} spots left</p>
+                  </div>
+                </div>
+                
+                <div class="mb-8">
+                  <h3 class="font-serif text-xl font-semibold text-sage-800 mb-4">What's Included</h3>
+                  <ul class="grid sm:grid-cols-2 gap-2">
+                    ${retreat.includes.map(i => `
+                      <li class="flex items-center gap-2 text-sage-600">
+                        <svg class="w-5 h-5 text-sage-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        ${i}
+                      </li>
+                    `).join('')}
+                  </ul>
+                </div>
+                
+                ${booking ? `
+                  <div class="bg-sage-50 rounded-2xl p-6 mb-8">
+                    <h3 class="font-serif text-xl font-semibold text-sage-800 mb-4">Your Booking</h3>
+                    <p class="text-sage-600 mb-4">Status: <span class="font-medium text-sage-800 capitalize">${booking.status}</span></p>
+                    
+                    <div class="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <label for="prep-notes" class="block text-sm font-medium text-sage-700 mb-2">Preparation Notes</label>
+                        <textarea id="prep-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors resize-none" placeholder="What do you want to focus on?">${booking.prepNotes || ''}</textarea>
+                      </div>
+                      <div>
+                        <label for="aftercare-notes" class="block text-sm font-medium text-sage-700 mb-2">Aftercare Notes</label>
+                        <textarea id="aftercare-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-cream-300 focus:border-sage-400 bg-white transition-colors resize-none" placeholder="Reflections after the retreat...">${booking.aftercareNotes || ''}</textarea>
+                      </div>
+                    </div>
+                    <button onclick="updateRetreatNotes('${retreat.id}')" class="mt-4 px-6 py-3 bg-sage-600 hover:bg-sage-700 text-white font-medium rounded-xl transition-colors">Save Notes</button>
+                  </div>
+                ` : ''}
+                
+                <div class="flex items-center justify-between border-t border-cream-200 pt-6">
+                  <div>
+                    <p class="text-sm text-sage-500">Investment</p>
+                    <p class="font-serif text-3xl font-semibold text-sage-800">$${retreat.price}</p>
+                  </div>
+                  ${booking ? `
+                    <span class="px-6 py-3 bg-sage-100 text-sage-700 font-medium rounded-xl">Booked</span>
+                  ` : `
+                    <button onclick="bookRetreat('${retreat.id}')" class="px-8 py-4 bg-sage-600 hover:bg-sage-700 text-white font-medium rounded-xl transition-colors">Book Your Spot</button>
+                  `}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function bookRetreat(retreatId) {
+      if (appData.length >= 999) {
+        showToast('Storage limit reached', 'warning');
+        return;
+      }
+      
+      const result = await window.dataSdk.create({
+        type: 'retreat-booking',
+        userId: currentUser.email,
+        date: new Date().toISOString(),
+        retreatId,
+        status: 'confirmed',
+        prepNotes: '',
+        aftercareNotes: ''
+      });
+      
+      if (result.isOk) {
+        showToast('Retreat booked! Check your email for details.');
+        renderRetreatDetail();
+      } else {
+        showToast('Failed to book retreat', 'error');
+      }
+    }
+
+    async function updateRetreatNotes(retreatId) {
+      const booking = appData.find(d => d.type === 'retreat-booking' && d.retreatId === retreatId && d.userId === currentUser.email);
+      if (!booking) return;
+      
+      const prepNotes = document.getElementById('prep-notes').value;
+      const aftercareNotes = document.getElementById('aftercare-notes').value;
+      
+      const result = await window.dataSdk.update({
+        ...booking,
+        prepNotes,
+        aftercareNotes
+      });
+      
+      if (result.isOk) {
+        showToast('Notes saved!');
+      } else {
+        showToast('Failed to save notes', 'error');
+      }
+    }
+
+    function renderCommunity() {
+      if (!currentUser) { navigate('login'); return; }
+      const main = document.getElementById('main-content');
+      
+      const userChallenges = getUserData('challenge');
+      
+      main.innerHTML = `
+        <div class="fade-in py-8 sm:py-12">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+              <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-sage-800 mb-2">Community Challenges</h1>
+              <p class="text-sage-600">Join challenges to build consistency and connect with others</p>
+            </div>
+            
+            <!-- Active Challenges -->
+            ${userChallenges.length > 0 ? `
+              <div class="mb-12">
+                <h2 class="font-serif text-2xl font-semibold text-sage-800 mb-4">Your Active Challenges</h2>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  ${userChallenges.map(uc => {
+                    const challenge = challenges.find(c => c.id === uc.challengeId);
+                    if (!challenge) return '';
+                    const progress = uc.progress || 0;
+                    const percent = Math.round((progress / challenge.duration) * 100);
+                    return `
+                      <div class="glass-card rounded-2xl p-6">
+                        <h3 class="font-serif text-lg font-semibold text-sage-800 mb-2">${challenge.title}</h3>
+                        <div class="mb-4">
+                          <div class="flex justify-between text-sm text-sage-600 mb-1">
+                            <span>Day ${progress} of ${challenge.duration}</span>
+                            <span>${percent}%</span>
+                          </div>
+                          <div class="h-2 bg-cream-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-sage-500 rounded-full transition-all" style="width: ${percent}%"></div>
+                          </div>
+                        </div>
+                        <p class="text-sage-600 text-sm mb-4">${challenge.tasks[progress] || 'Completed!'}</p>
+                        ${progress < challenge.duration ? `
+                          <button onclick="progressChallenge('${uc.__backendId}')" class="w-full py-2 bg-sage-600 hover:bg-sage-700 text-white text-sm font-medium rounded-lg transition-colors">Mark Day Complete</button>
+                        ` : `
+                          <span class="block text-center py-2 bg-lavender-100 text-lavender-600 font-medium rounded-lg">🎉 Challenge Complete!</span>
+                        `}
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            ` : ''}
+            
+            <!-- Available Challenges -->
+            <div>
+              <h2 class="font-serif text-2xl font-semibold text-sage-800 mb-4">Available Challenges</h2>
+              <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                ${challenges.map(c => {
+                  const joined = userChallenges.find(uc => uc.challengeId === c.id);
+                  return `
+                    <div class="glass-card rounded-2xl p-6">
+                      <h3 class="font-serif text-xl font-semibold text-sage-800 mb-2">${c.title}</h3>
+                      <p class="text-sage-600 text-sm mb-3">${c.desc}</p>
+                      <p class="text-sage-500 text-sm mb-4">${c.duration} days</p>
+                      ${joined ? `
+                        <span class="block text-center py-2 bg-cream-100 text-sage-600 font-medium rounded-lg">Already Joined</span>
+                      ` : `
+                        <button onclick="joinChallenge('${c.id}')" class="w-full py-2 bg-lavender-500 hover:bg-lavender-600 text-white font-medium rounded-lg transition-colors">Join Challenge</button>
+                      `}
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function joinChallenge(challengeId) {
+      if (appData.length >= 999) {
+        showToast('Storage limit reached', 'warning');
+        return;
+      }
+      
+      const result = await window.dataSdk.create({
+        type: 'challenge',
+        userId: currentUser.email,
+        date: new Date().toISOString(),
+        challengeId,
+        progress: 0
+      });
+      
+      if (result.isOk) {
+        showToast('Challenge joined! Good luck!');
+        renderCommunity();
+      } else {
+        showToast('Failed to join challenge', 'error');
+      }
+    }
+
+    async function progressChallenge(backendId) {
+      const challenge = appData.find(d => d.__backendId === backendId);
+      if (!challenge) return;
+      
+      const result = await window.dataSdk.update({
+        ...challenge,
+        progress: (challenge.progress || 0) + 1
+      });
+      
+      if (result.isOk) {
+        showToast('Day completed! Keep going!');
+      } else {
+        showToast('Failed to update progress', 'error');
+      }
+    }
+
+    function renderProfile() {
+      if (!currentUser) { navigate('login'); return; }
+      const main = document.getElementById('main-content');
+      const streak = getStreak();
+      const totalCheckIns = getUserData('checkin').length;
+      const totalPractices = appData.filter(d => d.userId === currentUser.email && ['meditation', 'breathwork', 'cbt', 'dbt'].includes(d.type)).length;
+      
+      main.innerHTML = `
+        <div class="fade-in py-8 sm:py-12">
+          <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-sage-800 mb-8">Your Profile</h1>
+            
+            <div class="glass-card rounded-3xl p-8 mb-8">
+              <div class="flex items-center gap-6 mb-6">
+                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-sage-400 to-lavender-400 flex items-center justify-center text-white font-serif text-3xl font-semibold">
+                  ${currentUser.name.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <h2 class="font-serif text-2xl font-semibold text-sage-800">${currentUser.name}</h2>
+                  <p class="text-sage-600">${currentUser.email}</p>
+                  <p class="text-sage-500 text-sm capitalize">Plan: ${currentUser.plan}</p>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="bg-cream-50 rounded-xl p-4 text-center">
+                  <p class="font-serif text-2xl font-semibold text-sage-800">${streak}</p>
+                  <p class="text-sm text-sage-500">Day Streak</p>
+                </div>
+                <div class="bg-cream-50 rounded-xl p-4 text-center">
+                  <p class="font-serif text-2xl font-semibold text-sage-800">${totalCheckIns}</p>
+                  <p class="text-sm text-sage-500">Check-Ins</p>
+                </div>
+                <div class="bg-cream-50 rounded-xl p-4 text-center">
+                  <p class="font-serif text-2xl font-semibold text-sage-800">${totalPractices}</p>
+                  <p class="text-sm text-sage-500">Practices</p>
+                </div>
+              </div>
+              
+              <p class="text-sage-500 text-sm">Member since ${new Date(currentUser.joined).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+            </div>
+            
+            <div class="glass-card rounded-3xl p-8">
+              <h3 class="font-serif text-xl font-semibold text-sage-800 mb-4">Account Settings</h3>
+              <div class="space-y-4">
+                <button onclick="navigate('pricing')" class="w-full text-left p-4 rounded-xl border border-cream-200 hover:border-sage-400 hover:bg-sage-50 transition-all">
+                  <p class="font-medium text-sage-800">Upgrade Plan</p>
+                  <p class="text-sm text-sage-500">Currently on ${currentUser.plan} plan</p>
+                </button>
+                <button onclick="logout()" class="w-full text-left p-4 rounded-xl border border-red-200 hover:border-red-400 hover:bg-red-50 transition-all">
+                  <p class="font-medium text-red-600">Sign Out</p>
+                  <p class="text-sm text-red-400">End your current session</p>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ============ ROUTER ============
+    function router() {
+      const { page, params } = getHashParams();
+      const menu = document.getElementById('mobile-menu');
+      if (menu) menu.remove();
+      
+      switch (page) {
+        case 'landing': renderLanding(); break;
+        case 'login': renderLogin(); break;
+        case 'signup': renderSignup(); break;
+        case 'dashboard': renderDashboard(); break;
+        case 'practices': renderPractices(); break;
+        case 'events': renderEvents(); break;
+        case 'event-detail': renderEventDetail(); break;
+        case 'retreats': renderRetreats(); break;
+        case 'retreat-detail': renderRetreatDetail(); break;
+        case 'community': renderCommunity(); break;
+        case 'profile': renderProfile(); break;
+        case 'pricing': renderPricing(); break;
+        default: renderLanding();
+      }
+      
+      window.scrollTo(0, 0);
+    }
+
+    // ============ INITIALIZATION ============
+    async function init() {
+      // Initialize Element SDK
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange,
+          mapToCapabilities,
+          mapToEditPanelValues
+        });
+      }
+      
+      // Initialize Data SDK
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error('Failed to initialize Data SDK');
+        }
+      }
+      
+      currentUser = getUser();
+      updateNav();
+      
+      window.addEventListener('hashchange', router);
+      
+      if (!window.location.hash) {
+        window.location.hash = '#landing';
+      } else {
+        router();
+      }
+    }
+
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d95a6d5c4552425',t:'MTc3MzAxMjg3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
